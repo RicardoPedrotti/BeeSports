@@ -4,7 +4,7 @@ Esse Repositório guarda os itens desenvolvidos para o projeto BeeSports
 
 ## Imagem do circuito do dispositivo
 
-![alt text](\Bee.png)
+[![alt text](../Bee.png)]
 
 ## Descrição das Pastas
 
@@ -19,6 +19,7 @@ Arquivos e referências dos dispositivos eletrônicos, algoritmos
 
 ### Programas Arduino
 BeeSports - O Sketch Arduino para rodar nos dispositivos Wearables
+
 BeeSports_Random - Sketch Arduino que envia dados aleatórios para a a nuvem. Ele segue o modelo do original, só que mandando dados sem a necessidade da conexão com o acelerômetro.
 
 ### Testes Dados
