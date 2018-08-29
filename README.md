@@ -4,7 +4,7 @@ Esse Repositório guarda os itens desenvolvidos para o projeto BeeSports
 
 ## Imagem do circuito do dispositivo
 
-[![alt text](../Bee.png)]
+[![alt text](https://github.com/RicardoPedrotti/BeeSports/blob/master/Bee.png)]
 
 ## Descrição das Pastas
 
