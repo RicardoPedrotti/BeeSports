@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "name": "Visual Micro",
+      "intelliSenseMode": "msvc-x64",
+      "includePath": [
+        "${projectRoot}..\\BeeSports",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\libraries",
+        "${projectRoot}..\\..\\Users\\ricar\\Documents\\Arduino\\libraries",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\avr\\include",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\avr\\include\\avr",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.8.1\\include",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",
+        "${projectRoot}..\\..\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.3\\include"
+      ],
+      "defines": [
+        "__AVR_ATmega328p__",
+        "__AVR_ATmega328P__",
+        "F_CPU=16000000L",
+        "ARDUINO=10804",
+        "ARDUINO_AVR_UNO",
+        "ARDUINO_ARCH_AVR",
+        "__cplusplus=201103L",
+        "_VMICRO_INTELLISENSE"
+      ]
+    }
+  ]
+}

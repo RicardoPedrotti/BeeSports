@@ -1,0 +1,29 @@
+SELECT * FROM `beesports`.`tb_login`;
+SELECT * FROM  BEESPORTS.TB_ATLETA;
+
+INSERT INTO `beesports`.`tb_pais`
+(`CD_PAIS`,`NM_PAIS`)
+VALUES(1,'Brasil');
+
+INSERT INTO `beesports`.`tb_cidade`
+(`CD_CIDADE`,`NM_CIDADE`,`CD_PAIS`,`DH_ULTIMA_ATU`)
+VALUES (1,'São Paulo',1,NOW());
+
+INSERT INTO `beesports`.`tb_endereco`
+(`CD_ENDERECO`,`DS_ENDERECO`,`DS_ENDERECO2`,`CD_CEP`,`NM_BAIRRO`,`CD_CIDADE`,`DH_ULTIMA_ATU`)
+VALUES (2,'Dr. Alfredo Elis, 19','Apt 45',01002003,'Paulista',1,NOW());
+
+
+INSERT INTO `beesports`.`tb_instituicao`
+(`CD_INSTITUICAO`,`NM_INSTITUICAO`,`NM_FANTASIA_INSTITUICAO`,`CD_CNPJ`,`CD_ENDERECO`,`DH_CRIACAO`,`DH_ULTIMA_ATU`)
+VALUES(1,'Academia de Futebol Cosas','Academia Cosas',12345678901223,2,NOW(),NOW());
+
+
+INSERT INTO `beesports`.`tb_treinador`
+(`CD_TREINADOR`, `NM_TREINADOR`,`DS_SEXO`,`NM_EMAIL`,`NM_PRIMEIRO_NOME`,`NM_ULTIMO_NOME`,`DT_NASCIMENTO`,
+`CD_RG`,`CD_CPF`,`CD_ENDERECO`,`FOTO`,`DH_CRIACAO`,`DH_ULTIMA_ATU`,`CD_INSTITUICAO`,`NU_TELEFONE_RES`,`NU_TELEFONE_CEL`)
+VALUES(1,'Lucas Cosas','M','lucas.cosas@msboy.com','Lucas','Cosas','1990-01-01',123456789,09876543212,2,NULL,NOW(),NOW()
+,1,35518361,11985308600);
+
+INSERT INTO beesports.tb_login (LOGIN, PASSWD, NM_USUARIO, NM_EMAIL, TP_USUARIO, CD_TREINADOR, DH_ULTIMO_LOGIN)
+VALUES ('teste_tecnico', 'teste', 'Lucas', 'lucas.cosas@msboy.com', 'T', 1, NOW());
