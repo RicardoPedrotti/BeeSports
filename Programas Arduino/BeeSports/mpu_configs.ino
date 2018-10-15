@@ -78,7 +78,7 @@ bool checkI2C(byte addr) {
 }
 
 //Função que liga o MPU, inicia a escala do giroscópio e inicia a escala do acelerômetro.
-  void iniciaMPU(byte addr) {
+void iniciaMPU(byte addr) {
   if (checkI2C(addr)) {
     setSleepOff();
     delay(50); //tempo para ligar o MPU

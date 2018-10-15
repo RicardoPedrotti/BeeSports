@@ -23,6 +23,7 @@ void iniciaWifi() {
   Serial.print("Endereco IP: ");
   Serial.println(WiFi.localIP());
 }
+
 static void iniciaTempo() {
   time_t epochTime;
   int timezone = -3;
@@ -40,7 +41,6 @@ static void iniciaTempo() {
     Serial.println(epochTime);
     //  break;
   }
-}
 Serial.println("Conectado ao tempo!");
 }
 //#################################################################################
