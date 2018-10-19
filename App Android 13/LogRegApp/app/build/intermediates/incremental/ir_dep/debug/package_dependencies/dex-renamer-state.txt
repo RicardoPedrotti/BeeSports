@@ -1,0 +1,4 @@
+#Sat Oct 13 18:29:26 BRT 2018
+base.0=C\:\\Users\\pedropifre\\Desktop\\LogRegApp\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\115
+path.0=classes.dex
+renamed.0=classes.dex
