@@ -32,15 +32,38 @@ static void iniciaTempo() {
   Serial.println("\nConectando aos sites de Tempo");
   while (true) {
     epochTime = time(NULL);
+    int MIN_EPOCH = 3600;
 
-    //if (epochTime < MIN_EPOCH) {
-    //  Serial.println("Fetching NTP epoch time failed! Waiting 2 seconds to retry.");
-    //delay(2000);
-    //} else {
-    Serial.print("Fetched NTP epoch time is: ");
-    Serial.println(epochTime);
-    //  break;
+    if (epochTime < MIN_EPOCH) {
+      Serial.println("Fetching NTP epoch time failed! Waiting 2 seconds to retry.");
+      delay(2000);
+    } else {
+      Serial.print("Fetched NTP epoch time is: ");
+      Serial.println(epochTime);
+      break;
+    }
+    Serial.println("Conectado ao tempo!");
   }
-Serial.println("Conectado ao tempo!");
 }
-//#################################################################################
+
+  String calculaHorario() {
+    //Começando as funções de tempo
+    time_t now;
+    struct tm * timeinfo;
+    time(&now);
+    timeinfo = localtime(&now);
+    String str_horario = "";
+
+    //Prints de Data
+    int dia = timeinfo->tm_mday;
+    int mes = timeinfo->tm_mon + 1;
+    int ano = timeinfo->tm_year + 1900;
+    int hora = timeinfo->tm_hour;
+    int minutos = timeinfo->tm_min;
+    int segundos = timeinfo->tm_sec;
+
+    str_horario = str_horario + dia + "/" + mes + "/" + ano;
+    str_horario = str_horario + " " + hora + ":" + minutos + ":" + segundos;
+    return str_horario;
+  }
+  //#################################################################################

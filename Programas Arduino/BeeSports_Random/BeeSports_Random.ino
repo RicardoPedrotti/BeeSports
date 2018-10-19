@@ -29,9 +29,10 @@ void setup()
   iniciaTempo();
   delay(500);
   Wire.begin();
-  delay(2000);
+  delay(200);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+  delay(2000);
   //millisinicio = millis();
   Serial.println("################  Fim do Setup  ################");
 }

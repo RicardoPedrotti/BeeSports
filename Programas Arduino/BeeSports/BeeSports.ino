@@ -2,6 +2,11 @@
 #include<Wire.h>
 #include <time.h>
 #include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+const char* mqtt_server = "54.94.143.174";
 
 //Endereco I2C do MPU6050
 const uint8_t MPU = 0x68;
@@ -12,6 +17,9 @@ const uint8_t MPU = 0x68;
 
 const int sda_pin = D2; // definição do pino I2C SDA
 const int scl_pin = D1;
+
+int threshhold = 80;
+int steps, flag = 0;
 
 struct rawdata {
   int16_t AcX;
@@ -45,6 +53,13 @@ struct acelerometro {
   float AcZ;
 };
 
+float xval[100] = {0};
+float yval[100] = {0};
+float zval[100] = {0};
+float xavg;
+float yavg;
+float zavg;
+
 //###############################  ARDUINO  ########################################
 void setup()
 {
@@ -58,67 +73,60 @@ void setup()
   Wire.begin();
   delay(500);
   iniciaMPU(MPU);
+  delay(500);
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
   delay(2000);
   //millisinicio = millis();
   Serial.println("################  Fim do Setup  ################");
 }
 void loop()
 {
-  //millisatual = millis(); //captura o tempo atual desde o começo do programa
-  
-  unsigned long millisamostra = 0;
-  bool onoff = true;
-  acelerometroamostra acc_filtrado[50];
-  scaleddata amostraescalar_max[50];
-  acelerometro acc_max;
-  acelerometro acc_min;
-  acelerometro acc_limite;
-  float sample_new[50];
-  float sample_old[50];
-  bool teste1 = false;
-  bool teste2 = false;
-  int contador_passos_ant = 0;
-  int contador_passos = 0;
+  int acc = 0;
+  float totvect[100] = {0};
+  float totave[100] = {0};
+  //float sum1,sum2,sum3=0;
+  float xaccl[100] = {0};
+  float yaccl[100] = {0};
+  float zaccl[100] = {0};
 
-  do {
-  //Teste envia Json:
-    String cd_serial_dispo = "BEE0001";
-    int bpm = 54;
-    int passos = 11;
+  for (int i = 0; i < 100; i++) {
+    acelerometroamostra amostra;
+    amostra = accel_filtrado('TRUE');
+    //Define AcX
+    xaccl[i] = amostra.AcX;
+    delay(1);
+    //Define AcY
+    yaccl[i] = amostra.AcY;
+    delay(1);
+    //Define AcZ
+    zaccl[i] = amostra.AcZ;
+    delay(1);
+
+    totvect[i] = sqrt(((xaccl[i] - xavg) * (xaccl[i] - xavg)) + ((yaccl[i] - yavg) * (yaccl[i] - yavg)) + ((zval[i] - zavg) * (zval[i] - zavg)));
+    totave[i] = (totvect[i] + totvect[i - 1]) / 2 ;
+    Serial.println(totave[i]);
+    delay(200);
+
     
-    //Serial.println("Início do DO...");
-    for (int i_amostra50 = 1; i_amostra50 < 51; i_amostra50++) {
-      acc_max = acc_min;
-      acc_min = acc_max;
-      acc_filtrado[i_amostra50] = accel_filtrado(false);
-      //### Max e min de X
-      acc_max = accelMax(acc_filtrado[i_amostra50], false, acc_max);
-      acc_min = accelMin(acc_filtrado[i_amostra50], false, acc_min);
-      millisamostra = millis();
-    //### Definindo o sample_old
-      /*sample_old[i_amostra50] = sample_new[i_amostra50 - 1];
-      //##Definindo o sample_new
-      if (acc_filtrado[i_amostra50].AcX > 1.04) {
-        sample_new[i_amostra50] = acc_filtrado[i_amostra50].AcX;
-      } else {
-        sample_new[i_amostra50] = sample_new[i_amostra50 - 1];
-      }*/
-      delay(20);
+    //detectando os Steps
+    if (totave[i] > threshhold && flag == 0)
+    {
+      steps = steps + 1;
+      flag = 1;
     }
-    acc_limite = limiteDinamico(acc_max, acc_min, false);
-    //Estrutura de decisão para a contagem de passos da última amostra
-    //Serial.println("Entrando no novo for de 50...");
-    for (int i_amostra50 = 1; i_amostra50 < 51; i_amostra50++ ) {
-      if (sample_new[i_amostra50] < sample_old[i_amostra50] /*&& acc_filtrado[i_amostra50].AcX < acc_limite.AcX*/) {
-        contador_passos_ant = contador_passos;
-        contador_passos = contador_passos + 1;
-      }
+    else if (totave[i] > threshhold && flag == 1)
+    {
+      //do nothing
     }
-
-    //if (contador_passos > contador_passos_ant) {
-    Serial.print("Passos: "); Serial.println(contador_passos);
-    criaJson(cd_serial_dispo, bpm, passos);
-    delay(10);
-  } while (onoff = true);
+    if (totave[i] < threshhold  && flag == 1)
+    {
+      flag = 0;
+    }
+    Serial.println('\n');
+    Serial.print("steps=");
+    Serial.println(steps);
+  }
+  delay(1000);
   Serial.println("Fim do Loop");
 }
