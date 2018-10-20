@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pedropifre.logregapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_logo1"
+        android:label="BeeSports"
+        android:roundIcon="@mipmap/ic_logo1"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Design.Light.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".DadosTreino" />
+        <activity
+            android:name=".treinador"
+            android:label="@string/title_activity_treinador" />
+        <activity
+            android:name=".treino_inicial"
+            android:label="@string/title_activity_treino_inicial" />
+        <activity
+            android:name=".registrar"
+            android:label="registrar" />
+        <activity
+            android:name=".comecar_treino"
+            android:label="@string/title_activity_comecar_treino" />
+        <activity
+            android:name=".escolha_jogador"
+            android:label="@string/title_activity_escolha_jogador" />
+        <activity
+            android:name=".graficodelinha"
+            android:label="@string/title_activity_line_chart"></activity>
+    </application>
+
+</manifest>

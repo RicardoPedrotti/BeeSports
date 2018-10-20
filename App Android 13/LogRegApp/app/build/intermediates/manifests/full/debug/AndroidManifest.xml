@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pedropifre.logregapp.LoginSuccess" />
+        <activity android:name="com.example.pedropifre.logregapp.DadosTreino" />
         <activity
             android:name="com.example.pedropifre.logregapp.treinador"
             android:label="@string/title_activity_treinador" />

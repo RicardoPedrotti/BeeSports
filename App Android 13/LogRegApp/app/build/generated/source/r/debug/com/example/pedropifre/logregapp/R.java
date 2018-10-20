@@ -3868,14 +3868,15 @@ public final class R {
     public static final int transition_position=0x7f0800da;
     public static final int transition_scene_layoutid_cache=0x7f0800db;
     public static final int transition_transform=0x7f0800dc;
-    public static final int uniform=0x7f0800dd;
-    public static final int up=0x7f0800de;
-    public static final int useLogo=0x7f0800df;
-    public static final int view_offset_helper=0x7f0800e0;
-    public static final int visible=0x7f0800e1;
-    public static final int withText=0x7f0800e2;
-    public static final int wrap=0x7f0800e3;
-    public static final int wrap_content=0x7f0800e4;
+    public static final int txt_nome=0x7f0800dd;
+    public static final int uniform=0x7f0800de;
+    public static final int up=0x7f0800df;
+    public static final int useLogo=0x7f0800e0;
+    public static final int view_offset_helper=0x7f0800e1;
+    public static final int visible=0x7f0800e2;
+    public static final int withText=0x7f0800e3;
+    public static final int wrap=0x7f0800e4;
+    public static final int wrap_content=0x7f0800e5;
   }
   public static final class integer {
     public static final int abc_config_activityDefaultDur=0x7f090000;
@@ -3918,9 +3919,9 @@ public final class R {
     public static final int abc_select_dialog_material=0x7f0a0019;
     public static final int abc_tooltip=0x7f0a001a;
     public static final int activity_comecar_treino=0x7f0a001b;
-    public static final int activity_escolha_jogador=0x7f0a001c;
-    public static final int activity_line_chart=0x7f0a001d;
-    public static final int activity_login_success=0x7f0a001e;
+    public static final int activity_dados_treino=0x7f0a001c;
+    public static final int activity_escolha_jogador=0x7f0a001d;
+    public static final int activity_line_chart=0x7f0a001e;
     public static final int activity_main=0x7f0a001f;
     public static final int activity_registrar=0x7f0a0020;
     public static final int activity_treinador=0x7f0a0021;
