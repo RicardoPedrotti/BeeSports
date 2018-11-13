@@ -72,10 +72,10 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:18:17-77
 	android:name
 		ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:18:27-74
-activity#com.example.pedropifre.logregapp.LoginSuccess
-ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:21:9-50
+activity#com.example.pedropifre.logregapp.DadosTreino
+ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:21:9-49
 	android:name
-		ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:21:19-47
+		ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:21:19-46
 activity#com.example.pedropifre.logregapp.treinador
 ADDED from C:\Users\pedropifre\Desktop\LogRegApp\app\src\main\AndroidManifest.xml:22:9-24:64
 	android:label

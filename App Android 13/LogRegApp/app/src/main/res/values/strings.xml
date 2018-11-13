@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LogRegApp</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_treinador">treinador</string>
+    <string name="title_activity_treino_inicial">treino_inicial</string>
+    <string name="title_activity_comecar_treino">comecar_treino</string>
+    <string name="title_activity_escolha_jogador">escolha_jogador</string>
+    <string name="title_activity_line_chart">LineChart</string>
+</resources>
