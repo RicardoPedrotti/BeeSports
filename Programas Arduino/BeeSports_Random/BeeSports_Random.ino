@@ -4,6 +4,9 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+int ledvermelho = 14; //D5
+int ledverde = 12; //D6
+
 //Endereco I2C do MPU6050
 const uint8_t MPU = 0x68;
 
@@ -24,15 +27,24 @@ void setup()
   Serial.println("################  Inicia Setup  ################");
   iniciaSerial();
   delay(500);
+  ligaLed(ledvermelho, ledverde);
+  delay(500);
   iniciaWifi();
+  delay(500);
+  piscaLed(ledvermelho, 500, 1);
   delay(500);
   iniciaTempo();
   delay(500);
+  piscaLed(ledvermelho, 500, 1);
+  delay(500);
   Wire.begin();
+  delay(500);
+  piscaLed(ledvermelho, 500, 1);
   delay(200);
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-  delay(2000);
+  delay(500);
+  piscaLeds(ledvermelho, ledverde, 50, 3);
   //millisinicio = millis();
   Serial.println("################  Fim do Setup  ################");
 }
@@ -68,6 +80,7 @@ void loop()
   Serial.println(msg);
 
   bool x = client.publish("outTopic", msg);// BEE0001, QTD_BATIMENTOS_CARDIACOS: 96, HORARIO_MEDICAO: 17/10/2018 19:26:50, TD_PASSOS: 8 }");
+  piscaLed(ledverde, 200, 1);
   if (x){
     Serial.println("DEVIA TER IDO E SE N FOI VCS SAO UNS NOOB");
   }else{

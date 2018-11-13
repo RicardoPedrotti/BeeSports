@@ -54,7 +54,7 @@ void reconnect() {
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
-      delay(5000);
+      piscaLed(ledvermelho, 5000, 1);
     }
   }
 }
