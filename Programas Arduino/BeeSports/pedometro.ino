@@ -7,7 +7,26 @@ const float MPU_ACCL_4_SCALE = 8192.0;
 const float MPU_ACCL_8_SCALE = 4096.0;
 const float MPU_ACCL_16_SCALE = 2048.0;
 
-//Função que lê os dados crus de 16 bits do sensor
+//############ FUNÇÕES DE DEFINIÇÃO DE ESCALAS
+void setMPU6050scales(byte addr, uint8_t Gyro, uint8_t Accl) {
+  Wire.beginTransmission(addr);
+  Wire.write(0x1B); // write to register starting at 0x1B
+  Wire.write(Gyro); // Self Tests Off and set Gyro FS to 250
+  Wire.write(Accl); // Self Tests Off and set Accl FS to 8g
+  Wire.endTransmission(true);
+}
+
+void getMPU6050scales(byte addr, uint8_t &Gyro, uint8_t &Accl) {
+  Wire.beginTransmission(addr);
+  Wire.write(0x1B); // starting with register 0x3B (ACCEL_XOUT_H)
+  Wire.endTransmission(false);
+  Wire.requestFrom(addr, 2, true); // request a total of 14 registers
+  Gyro = (Wire.read() & (bit(3) | bit(4))) >> 3;
+  Accl = (Wire.read() & (bit(3) | bit(4))) >> 3;
+}
+//#######################################################
+
+//##############  Função que lê os dados crus de 16 bits do sensor
 rawdata lerMPU(byte addr, bool Debug) {
   rawdata values;
   Wire.beginTransmission(addr);
@@ -27,7 +46,7 @@ rawdata lerMPU(byte addr, bool Debug) {
   return values;
 }
 
-// Função que recebe os dados brutos de rawdata e converte para valores escalares
+//####################### Função que recebe os dados brutos de rawdata e converte para valores escalares
 scaleddata converteEscalar(byte addr, rawdata data_in, bool Debug) {
   scaleddata scalevalues;
   float scale_value = 0.0;
@@ -92,22 +111,25 @@ scaleddata converteEscalar(byte addr, rawdata data_in, bool Debug) {
 
   return scalevalues;
 }
+//####################################################################################
 
-void setMPU6050scales(byte addr, uint8_t Gyro, uint8_t Accl) {
-  Wire.beginTransmission(addr);
-  Wire.write(0x1B); // write to register starting at 0x1B
-  Wire.write(Gyro); // Self Tests Off and set Gyro FS to 250
-  Wire.write(Accl); // Self Tests Off and set Accl FS to 8g
-  Wire.endTransmission(true);
-}
-
-void getMPU6050scales(byte addr, uint8_t &Gyro, uint8_t &Accl) {
-  Wire.beginTransmission(addr);
-  Wire.write(0x1B); // starting with register 0x3B (ACCEL_XOUT_H)
-  Wire.endTransmission(false);
-  Wire.requestFrom(addr, 2, true); // request a total of 14 registers
-  Gyro = (Wire.read() & (bit(3) | bit(4))) >> 3;
-  Accl = (Wire.read() & (bit(3) | bit(4))) >> 3;
+//#################### Funções de Passômetro
+//### Essa função pega 3 leituras do MPU já convertidas para escalar e filtra só o accel
+acelerometroamostra filtroDigital(scaleddata arrayamostra[], bool debug) {
+  //Serial.println("Fazendo filtro digital...");
+  //Calcula a média das 3 leituras e joga em uma variável
+  acelerometroamostra accfiltrado;
+  accfiltrado.AcX = (arrayamostra[1].AcX + arrayamostra[2].AcX + arrayamostra[3].AcX) / 3;
+  accfiltrado.AcY = (arrayamostra[1].AcY + arrayamostra[2].AcY + arrayamostra[3].AcY) / 3;
+  accfiltrado.AcZ = (arrayamostra[1].AcZ + arrayamostra[2].AcZ + arrayamostra[3].AcZ) / 3;
+  accfiltrado.millisamostra = millis();
+  if (debug) {
+    Serial.print(" AcX_filtrado: "); Serial.print(accfiltrado.AcX);
+    Serial.print(" | AcY_filtrado: "); Serial.print(accfiltrado.AcY);
+    Serial.print(" | AcZ_filtrado: "); Serial.println(accfiltrado.AcZ);
+    Serial.print(" | Millis: "); Serial.println(accfiltrado.millisamostra);
+  }
+  return accfiltrado;
 }
 
 acelerometroamostra accel_filtrado(bool debug) {
@@ -162,24 +184,6 @@ acelerometro accelMin(acelerometroamostra amostra, bool debug, acelerometro amos
   return valoresmin;
 }
 
-// essa função pega 3 leituras do MPU já convertidas para escalar e filtra só o accel
-acelerometroamostra filtroDigital(scaleddata arrayamostra[], bool debug) {
-  //Serial.println("Fazendo filtro digital...");
-  //Calcula a média das 3 leituras e joga em uma variável
-  acelerometroamostra accfiltrado;
-  accfiltrado.AcX = (arrayamostra[1].AcX + arrayamostra[2].AcX + arrayamostra[3].AcX) / 3;
-  accfiltrado.AcY = (arrayamostra[1].AcY + arrayamostra[2].AcY + arrayamostra[3].AcY) / 3;
-  accfiltrado.AcZ = (arrayamostra[1].AcZ + arrayamostra[2].AcZ + arrayamostra[3].AcZ) / 3;
-  accfiltrado.millisamostra = millis();
-  if (debug) {
-    Serial.print(" AcX_filtrado: "); Serial.print(accfiltrado.AcX);
-    Serial.print(" | AcY_filtrado: "); Serial.print(accfiltrado.AcY);
-    Serial.print(" | AcZ_filtrado: "); Serial.println(accfiltrado.AcZ);
-    Serial.print(" | Millis: "); Serial.println(accfiltrado.millisamostra);
-  }
-  return accfiltrado;
-}
-
 acelerometro limiteDinamico(acelerometro amostramax, acelerometro amostramin, bool debug) {
   acelerometro limitedinamico;
   limitedinamico.AcX = (amostramax.AcX + amostramin.AcX) / 2;
@@ -192,3 +196,55 @@ acelerometro limiteDinamico(acelerometro amostramax, acelerometro amostramin, bo
   }
   return limitedinamico;
 }
+
+void lerPassos() {
+  int acc = 0;
+  float totvect[100] = {0};
+  float totave[100] = {0};
+  //float sum1,sum2,sum3=0;
+  float xaccl[100] = {0};
+  float yaccl[100] = {0};
+  float zaccl[100] = {0};
+
+  int threshhold = 80;
+  int steps, flag = 0;
+
+  for (int i = 0; i < 100; i++) {
+    acelerometroamostra amostra;
+    amostra = accel_filtrado("FALSE");
+    //Define AcX
+    xaccl[i] = amostra.AcX; delay(1);
+    //Define AcY
+    yaccl[i] = amostra.AcY; delay(1);
+    //Define AcZ
+    zaccl[i] = amostra.AcZ; delay(1);
+
+    totvect[i] = sqrt(pow(xaccl[i], 2) + pow(yaccl[i], 2) + pow(zaccl[i], 2));
+    Serial.println(totvect[i]);
+    //totvect[i] = sqrt(((xaccl[i] - xavg) * (xaccl[i] - xavg)) + ((yaccl[i] - yavg) * (yaccl[i] - yavg)) + ((zval[i] - zavg) * (zval[i] - zavg)));
+    //totave[i] = (totvect[i] + totvect[i - 1]) / 2 ;
+    //Serial.println(totave[i]);
+    delay(200);
+
+    //detectando os Steps
+    /*
+      if (totave[i] > threshhold && flag == 0)
+      {
+      steps = steps + 1;
+      flag = 1;
+      }
+      else if (totave[i] > threshhold && flag == 1)
+      {
+      //do nothing
+      }
+      if (totave[i] < threshhold  && flag == 1)
+      {
+      flag = 0;
+      }
+      Serial.println('\n');
+      Serial.print("steps=");
+      Serial.println(steps);
+    */
+  }
+}
+

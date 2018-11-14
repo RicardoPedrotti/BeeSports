@@ -26,19 +26,19 @@ void setup()
 {
   Serial.println("################  Inicia Setup  ################");
   iniciaSerial();
-  delay(500);
+  delay(100);
   ligaLed(ledvermelho, ledverde);
-  delay(500);
+  delay(100);
   iniciaWifi();
-  delay(500);
+  delay(100);
   piscaLed(ledvermelho, 500, 1);
-  delay(500);
+  delay(100);
   iniciaTempo();
-  delay(500);
+  delay(100);
   piscaLed(ledvermelho, 500, 1);
-  delay(500);
+  delay(100);
   Wire.begin();
-  delay(500);
+  delay(100);
   piscaLed(ledvermelho, 500, 1);
   delay(200);
   client.setServer(mqtt_server, 1883);
@@ -79,7 +79,8 @@ void loop()
   Serial.println("Hello World");
   Serial.println(msg);
 
-  bool x = client.publish("outTopic", msg);// BEE0001, QTD_BATIMENTOS_CARDIACOS: 96, HORARIO_MEDICAO: 17/10/2018 19:26:50, TD_PASSOS: 8 }");
+  bool x = "TRUE";
+  //bool x = client.publish("outTopic", msg);// BEE0001, QTD_BATIMENTOS_CARDIACOS: 96, HORARIO_MEDICAO: 17/10/2018 19:26:50, TD_PASSOS: 8 }");
   piscaLed(ledverde, 200, 1);
   if (x){
     Serial.println("DEVIA TER IDO E SE N FOI VCS SAO UNS NOOB");

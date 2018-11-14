@@ -3,6 +3,10 @@
 #include <time.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <math.h>
+
+int ledvermelho = 14; //D5
+int ledverde = 12; //D6
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -17,9 +21,6 @@ const uint8_t MPU = 0x68;
 
 const int sda_pin = D2; // definição do pino I2C SDA
 const int scl_pin = D1;
-
-int threshhold = 80;
-int steps, flag = 0;
 
 struct rawdata {
   int16_t AcX;
@@ -64,69 +65,34 @@ float zavg;
 void setup()
 {
   Serial.println("################  Inicia Setup  ################");
-  iniciaSerial();
-  delay(500);
-  iniciaWifi();
-  delay(500);
-  iniciaTempo();
-  delay(500);
-  Wire.begin();
-  delay(500);
-  iniciaMPU(MPU);
-  delay(500);
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
-  delay(2000);
+  iniciaSerial();  delay(100);
+  ligaLed(ledvermelho, ledverde);  delay(100);
+  //iniciaWifi();  delay(100);
+  piscaLed(ledvermelho, 200, 1);  delay(100);
+  //iniciaTempo();  delay(100);
+  piscaLed(ledvermelho, 200, 1);  delay(100);
+  Wire.begin();  delay(100);
+  piscaLed(ledvermelho, 200, 1);  delay(100);
+  iniciaMPU(MPU);  delay(100);
+  piscaLed(ledvermelho, 200, 1);  delay(100);
+
+  //client.setServer(mqtt_server, 1883);
+  //client.setCallback(callback);  delay(100);
+
+  piscaLeds(ledvermelho, ledverde, 100, 3);
   //millisinicio = millis();
   Serial.println("################  Fim do Setup  ################");
 }
+
 void loop()
 {
-  int acc = 0;
-  float totvect[100] = {0};
-  float totave[100] = {0};
-  //float sum1,sum2,sum3=0;
-  float xaccl[100] = {0};
-  float yaccl[100] = {0};
-  float zaccl[100] = {0};
-
-  for (int i = 0; i < 100; i++) {
-    acelerometroamostra amostra;
-    amostra = accel_filtrado('TRUE');
-    //Define AcX
-    xaccl[i] = amostra.AcX;
-    delay(1);
-    //Define AcY
-    yaccl[i] = amostra.AcY;
-    delay(1);
-    //Define AcZ
-    zaccl[i] = amostra.AcZ;
-    delay(1);
-
-    totvect[i] = sqrt(((xaccl[i] - xavg) * (xaccl[i] - xavg)) + ((yaccl[i] - yavg) * (yaccl[i] - yavg)) + ((zval[i] - zavg) * (zval[i] - zavg)));
-    totave[i] = (totvect[i] + totvect[i - 1]) / 2 ;
-    Serial.println(totave[i]);
-    delay(200);
-
-    
-    //detectando os Steps
-    if (totave[i] > threshhold && flag == 0)
-    {
-      steps = steps + 1;
-      flag = 1;
-    }
-    else if (totave[i] > threshhold && flag == 1)
-    {
-      //do nothing
-    }
-    if (totave[i] < threshhold  && flag == 1)
-    {
-      flag = 0;
-    }
-    Serial.println('\n');
-    Serial.print("steps=");
-    Serial.println(steps);
+  /*
+  if (!client.connected()) {
+    reconnect();
   }
-  delay(1000);
-  Serial.println("Fim do Loop");
+  client.loop();
+*/
+  lerPassos();
+  delay(10);
+  //Serial.println("Fim do Loop");
 }

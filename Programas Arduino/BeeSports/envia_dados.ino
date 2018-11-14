@@ -15,9 +15,9 @@
 String criaJson(String serial_dispositivo, int bpm, String horario, int passos) {
   String Json = "";
   Json = "{\n\"CD_DISP\": \"" + serial_dispositivo
-  + "\",\n\"QT_BPM\": " + bpm
-  + ",\n\"HORA\": \"" + horario
-  + "\",\n\"QT_PASS\": " + passos + "\n}";
+         + "\",\n\"QT_BPM\": " + bpm
+         + ",\n\"HORA\": \"" + horario
+         + "\",\n\"QT_PASS\": " + passos + "\n}";
   //Serial.println(Json);
   return Json;
 }
@@ -54,6 +54,7 @@ void reconnect() {
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
+      piscaLed(ledvermelho, 500, 5);
       delay(5000);
     }
   }
