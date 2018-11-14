@@ -2,12 +2,16 @@
 const char* ssid = "Virus";
 const char* password = "ric12345";
 
-static void iniciaSerial()
+static void iniciaSerial(bool debug)
 {
-  Serial.println("Booting in 115200");
+  if (debug){
+    Serial.println("Booting in 115200");
+  }
   Serial.begin(115200);
   Serial.setDebugOutput(true);
-  Serial.println("Serial Iniciado com Sucesso.");
+  if (debug){
+   Serial.println("Serial Iniciado com Sucesso."); 
+  }
 }
 
 void iniciaWifi() {

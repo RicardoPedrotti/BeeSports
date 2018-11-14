@@ -206,12 +206,15 @@ void lerPassos() {
   float yaccl[100] = {0};
   float zaccl[100] = {0};
 
+  float minimo50 = 100;
+  float maximo50 = 0;
+
   int threshhold = 80;
   int steps, flag = 0;
 
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 50; i++) {
     acelerometroamostra amostra;
-    amostra = accel_filtrado("FALSE");
+    amostra = accel_filtrado(false);
     //Define AcX
     xaccl[i] = amostra.AcX; delay(1);
     //Define AcY
@@ -220,13 +223,62 @@ void lerPassos() {
     zaccl[i] = amostra.AcZ; delay(1);
 
     totvect[i] = sqrt(pow(xaccl[i], 2) + pow(yaccl[i], 2) + pow(zaccl[i], 2));
-    Serial.println(totvect[i]);
+    //Serial.println(totvect[i]);
+
     //totvect[i] = sqrt(((xaccl[i] - xavg) * (xaccl[i] - xavg)) + ((yaccl[i] - yavg) * (yaccl[i] - yavg)) + ((zval[i] - zavg) * (zval[i] - zavg)));
     //totave[i] = (totvect[i] + totvect[i - 1]) / 2 ;
     //Serial.println(totave[i]);
-    delay(200);
 
-    //detectando os Steps
+    if (totvect[i] < minimo50) {
+      minimo50 = totvect[i];
+    }
+
+    if (totvect[i] > maximo50) {
+      maximo50 = totvect[i];
+    }
+    delay(100);
+
+    /*
+      //Serial.println(" ");
+      //Serial.print("total: ");
+      Serial.print(totvect[i]);
+      Serial.print(",");
+      //Serial.print("threshold: ");
+      Serial.println(threshold);
+    */
+
+    //STEPS NEW
+    //0 = sample_old e 1 = sample_new
+    step_sample[0] = step_sample[1];
+    if ((totvect[i] - step_sample[1]) < precision) {
+      step_sample[1] = totvect[i];
+    }
+
+    flag1 = false;
+    if (step_sample[1] < step_sample[0]) {
+      flag1 = true;
+    }
+    flag2 = false;
+    if (totvect[i] < threshold) {
+      flag2 = true;
+    }
+
+    if (flag1 == true && flag2 == true) {
+      passos = passos + 1;
+    }
+    /*
+        Serial.print("sample_old:");
+        Serial.println(step_sample[0]);
+        Serial.print("sample_new:");
+        Serial.println(step_sample[1]);
+    */
+    /*
+        Serial.print("Flag1:");
+        Serial.println(flag1);
+        Serial.print("Flag2:");
+        Serial.println(flag2);
+    */
+    //detectando os Steps .OLD
     /*
       if (totave[i] > threshhold && flag == 0)
       {
@@ -246,5 +298,10 @@ void lerPassos() {
       Serial.println(steps);
     */
   }
+
+  maximo = maximo50;
+  minimo = minimo50;
+  threshold = (maximo + minimo) / 2;
+
 }
 

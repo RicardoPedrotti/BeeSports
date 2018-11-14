@@ -61,23 +61,35 @@ float xavg;
 float yavg;
 float zavg;
 
+//## Variáveis para reconhecimento de passos
+float maximo = 0;
+float minimo = 100;
+float threshold = 50;
+float step_sample[2];
+
+float precision = 1;
+bool flag1;
+bool flag2;
+int passos = 0;
+
+//#####
 //###############################  ARDUINO  ########################################
 void setup()
 {
   Serial.println("################  Inicia Setup  ################");
-  iniciaSerial();  delay(100);
+  iniciaSerial(false);  delay(100);
   ligaLed(ledvermelho, ledverde);  delay(100);
-  //iniciaWifi();  delay(100);
+  iniciaWifi();  delay(100);
   piscaLed(ledvermelho, 200, 1);  delay(100);
-  //iniciaTempo();  delay(100);
+  iniciaTempo();  delay(100);
   piscaLed(ledvermelho, 200, 1);  delay(100);
   Wire.begin();  delay(100);
   piscaLed(ledvermelho, 200, 1);  delay(100);
   iniciaMPU(MPU);  delay(100);
   piscaLed(ledvermelho, 200, 1);  delay(100);
 
-  //client.setServer(mqtt_server, 1883);
-  //client.setCallback(callback);  delay(100);
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);  delay(100);
 
   piscaLeds(ledvermelho, ledverde, 100, 3);
   //millisinicio = millis();
@@ -86,13 +98,13 @@ void setup()
 
 void loop()
 {
-  /*
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
-*/
+
   lerPassos();
-  delay(10);
+  Serial.print("Passos:");
+  Serial.println(passos);
   //Serial.println("Fim do Loop");
 }
