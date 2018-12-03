@@ -4,13 +4,13 @@ const char* password = "ric12345";
 
 static void iniciaSerial(bool debug)
 {
-  if (debug){
+  if (debug) {
     Serial.println("Booting in 115200");
   }
   Serial.begin(115200);
   Serial.setDebugOutput(true);
-  if (debug){
-   Serial.println("Serial Iniciado com Sucesso."); 
+  if (debug) {
+    Serial.println("Serial Iniciado com Sucesso.");
   }
 }
 
@@ -29,8 +29,8 @@ void iniciaWifi() {
   Serial.println(WiFi.localIP());
 }
 
-void piscaCheckWifi(){
-  if (WiFi.status() != WL_CONNECTED){
+void piscaCheckWifi() {
+  if (WiFi.status() != WL_CONNECTED) {
     piscaLed(ledvermelho, 10, 5);
   }
 }
@@ -104,5 +104,17 @@ void piscaLeds(int led1, int led2, int tempo, int qtd) {
     digitalWrite(led1, LOW);
     digitalWrite(led2, LOW);
   }
+}
+
+int mean(int arr[60]) {
+  int i;
+  float sum = 0;
+  float average = 0.0;
+  /* calculate the sum of grades using for loop*/
+  for (i = 0; i <= 60; i++) {
+    sum = sum + arr[i];
+  }
+  average = sum / 60;
+  return average;
 }
 //#################################################################################

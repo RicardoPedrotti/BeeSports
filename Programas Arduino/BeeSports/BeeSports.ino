@@ -67,10 +67,13 @@ float minimo = 100;
 float threshold = 50;
 float step_sample[2];
 
-float precision = 1;
+int iloop = 1;
+float precision = 0.35;
 bool flag1;
 bool flag2;
 int passos = 0;
+
+String serial = "BEE0001";
 
 //#####
 //###############################  ARDUINO  ########################################
@@ -98,13 +101,54 @@ void setup()
 
 void loop()
 {
+  String cd_serial_dispo = "";
+  int bpm[60];
+  int bpmf;
+  String horario = "";
+  int passos = 0;
+
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
+  unsigned long millisatu;
+  millisatu = millis();
+  int i = 0;
+  passos = passos + lerPassos();
+  bpm[i] = random(80, 180);
 
-  lerPassos();
-  Serial.print("Passos:");
-  Serial.println(passos);
-  //Serial.println("Fim do Loop");
+  cd_serial_dispo = serial;
+  horario = calculaHorario();
+  bpmf = mean(bpm);
+
+  String mqttmsg = criaJson(cd_serial_dispo, bpmf, horario, passos);
+
+  Serial.println(mqttmsg);
+  piscaLed(ledverde, 200, 1);
+  //int str_len = mqttmsg.length() + 3;
+  //char msg[str_len];
+
+  /*
+
+    mqttmsg.toCharArray(msg, str_len);
+
+
+    //int value = 0;
+    //snprintf (msg, 75, mqttmsg, value);
+    Serial.print("Publish message: ");
+    Serial.println("Hello World");
+    Serial.println(msg);
+
+    bool x = "TRUE";
+    //bool x = client.publish("outTopic", msg);// BEE0001, QTD_BATIMENTOS_CARDIACOS: 96, HORARIO_MEDICAO: 17/10/2018 19:26:50, TD_PASSOS: 8 }");
+    piscaLed(ledverde, 200, 1);
+    if (x){
+      Serial.println("DEVIA TER IDO E SE N FOI VCS SAO UNS NOOB");
+    }else{
+      Serial.println("ESCAFEDEU-SE");
+    }
+
+    delay(3000);
+  */
+
 }
